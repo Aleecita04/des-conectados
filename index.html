@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Gochi+Hand&family=Indie+Flower&family=Modak&family=Rock+3D&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DES-CONECTADOS</title>
+    <style>
+        h1 {
+            font-family: "Rock 3D", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            background: linear-gradient(to bottom right, purple, pink);
+        }
+        .container {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            aspect-ratio: 1;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid black;
+            position: relative;
+            transform-origin: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 3s;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(180deg);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid #fff;
+            z-index: 1;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background: linear-gradient(purple, pink);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            font-family: "DynaPuff", serif;
+            font-weight: 400;
+        }
+
+        button:hover {
+            background-color: rgb(241, 169, 205);
+        }
+
+        button:active {
+            box-shadow: 0 2px rgb(61, 3, 32);
+            transform: translateY(2px);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-family: "Gochi Hand", serif;
+            font-weight: 400;
+        }
+
+        .segment {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transform-origin: center;
+        }
+
+        .segment-1 {
+            background-image: url('Diseño sin título.png');
+            width: 115%;
+            height: 120%;
+            top: -15%;
+        }
+    </style>
+</head>
+<body>
+    <h1>DES-CONECTADOS</h1>
+    <div class="container">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel">
+            <div class="segment segment-1"></div>
+            <div class="segment segment-2"></div>
+            <div class="segment segment-3"></div>
+            <div class="segment segment-4"></div>
+            <div class="categoria">Presentacion</div>
+            <div class="categoria">Profundidad</div>
+            <div class="categoria">Descomprimir</div>
+            <div class="categoria">Perspectiva</div>
+        </div>
+    </div>
+    <button onclick="reiniciarPreguntas()">Reiniciar Ruleta</button>
+    <div id="result"></div>
+
+    <script>
+        const preguntas = {
+            descomprimir: [
+                "¿Si fueras un animal, cuál serías y por qué?",
+"¿Cómo se llamaría tu autobiografía?",
+"¿Qué invento te gustaría crear?",
+"¿Qué harías si fueras invisible por un día?",
+"¿Qué superhéroe te gustaría ser?",
+"¿Qué harías si pudieras viajar en el tiempo?",
+"¿Cómo sería un mundo ideal según tú?",
+"¿Qué harías con un millón de dólares?",
+"¿Cómo sería tu fiesta perfecta?",
+"¿Qué harías si pudieras volar?",
+"¿Qué nombre te pondrías si fueras famoso?",
+"¿Si tu vida fuera una película, cómo se llamaría?",
+"¿Qué harías si encontraras un tesoro enterrado?",
+"¿Qué harías si pudieras detener el tiempo?",
+"¿Qué personaje ficticio te representa?",
+"¿Si pudieras tener cualquier profesión, cuál sería?",
+"¿Qué emoji describe tu estado actual?",
+"¿Qué harías si pudieras vivir en otro planeta?",
+"¿Cómo sería tu parque de diversiones ideal?",
+"¿Si fueras un sabor de helado, cuál serías?",
+"¿Qué objeto cotidiano te representa mejor?",
+"¿Qué harías si pudieras cambiar de cuerpo con alguien por un día?",
+"¿Cómo sería tu casa soñada?",
+"¿Qué harías si descubrieras un superpoder?",
+"¿Qué música sonarías si fueras una canción?",
+"¿Si fueras un personaje de Disney, quién serías?",
+"¿Qué nombre creativo le pondrías a un restaurante?",
+"¿Cómo sería tu superpoder más extraño?",
+"¿Qué harías si pudieras hablar con los animales?",
+"¿Qué lugar inventarías para vivir por siempre?",
+"¿Qué harías si pudieras controlar el clima?",
+"¿Si fueras un objeto inanimado, cuál serías?",
+"¿Qué le dirías a tu yo del futuro?",
+"¿Cómo sería tu bebida personalizada?",
+"¿Si pudieras ser cualquier cosa, qué elegirías?",
+"¿Qué habilidad inútil te gustaría dominar?",
+"¿Cómo sería un día en un planeta habitado solo por gatos?",
+"¿Qué invento cambiaría tu vida por completo?",
+"¿Si pudieras cambiar tu voz, cómo sería?",
+"¿Qué harías si pudieras ser otra especie por un día?",
+"¿Cómo sería tu mundo ideal para vacacionar?",
+"¿Qué le dirías a un extraterrestre si te visitara?",
+"¿Cómo sería tu caricatura o cómic?",
+"¿Qué es lo más loco que harías con un millón de dólares?",
+"¿Cómo sería tu versión animada en una película?",
+"¿Qué historia loca inventarías sobre tu vida?",
+"¿Qué harías si los objetos hablaran?",
+"¿Cómo sería un día como gigante?",
+"¿Qué harías si el tiempo funcionara al revés?",
+"¿Cómo decorarías una casa en otro planeta?"
+            ],
+            presentacion: [
+                "¿Qué película puedes ver mil veces sin aburrirte?",
+"¿Prefieres playa, montaña o ciudad?",
+"¿Qué comida te trae nostalgia?",
+"¿Cuál es tu género musical favorito?",
+"¿Qué plato sería tu última cena?",
+"¿Qué lugar sueñas con visitar?",
+"¿Qué libro o autor marcó tu vida?",
+"¿Qué personaje histórico te inspira más?",
+"¿Qué color representa tu personalidad?",
+"¿Cuál es tu actividad favorita un domingo?",
+"¿Prefieres café o té?",
+"¿Qué serie estás viendo actualmente?",
+"¿Qué hobby te gustaría retomar o aprender?",
+"¿Qué festividad disfrutas más?",
+"¿Qué tipo de clima prefieres?",
+"¿Qué emoji usas más seguido?",
+"¿Qué canción describe tu vida ahora?",
+"¿Eres de dulces o salados?",
+"¿Qué superpoder desearías tener?",
+"¿Qué tipo de libros prefieres leer?",
+"¿Cómo sería tu día ideal?",
+"¿Qué prefieres: el amanecer o el atardecer?",
+"¿Tienes algún talento oculto?",
+"¿Qué lugar te hace sentir en paz?",
+"¿Cuál es tu tipo de vacaciones ideal?",
+"¿Cuál es tu libro favorito y por qué?",
+"¿Qué sabor de helado nunca pedirías?",
+"¿Qué deporte disfrutas ver o practicar?",
+"¿Tienes un color de la suerte?",
+"¿Qué canción hace que te levantes a bailar?",
+"¿Cuál es tu festividad menos favorita?",
+"¿Qué accesorio nunca falta en tu outfit?",
+"¿Tienes una película que siempre te hace llorar?",
+"¿Qué comida podrías comer todos los días?",
+"¿Qué videojuego te marcó en tu infancia?",
+"¿Prefieres las películas subtituladas o dobladas?",
+"¿Qué prefieres: cine o teatro?",
+"¿Qué lugar consideras 'tu refugio'?",
+"¿Cuál es tu género de libros favorito?",
+"¿Qué instrumento musical te gustaría aprender?"   
+            ],
+            perspectiva: [
+                "¿Crees que las personas pueden cambiar radicalmente?",
+"¿Qué opinas sobre la importancia del perdón?",
+"¿Es mejor seguir la lógica o el corazón?",
+"¿Cuál es el mayor desafío de la humanidad hoy?",
+"¿Todo ocurre por una razón o es al azar?",
+"¿Qué significa el éxito para ti?",
+"¿Es la felicidad una meta o un camino?",
+"¿Qué tanto influye la suerte en la vida?",
+"¿El talento es innato o se desarrolla?",
+"¿Qué valoras más: el respeto o la empatía?",
+"¿Cuál es tu idea de una sociedad justa?",
+"¿Qué define a un héroe en tu opinión?",
+"¿Cómo lidias con las críticas?",
+"¿Qué es más importante: estabilidad o aventura?",
+"¿Es posible el amor incondicional?",
+"¿Qué prefieres: destino o libre albedrío?",
+"¿Cómo definirías la justicia en tus propias palabras?",
+"¿Crees que la educación transforma vidas?",
+"¿Cómo influye la tecnología en la forma de ver el mundo?",
+"¿Qué es lo que hace significativa a una vida?",
+"¿Qué opinas sobre los movimientos sociales modernos?",
+"¿Crees que existe una verdad absoluta?",
+"¿Qué preferirías: paz mundial o desarrollo personal?",
+"¿Es importante la religión para la moralidad?",
+"¿Qué responsabilidad tienen las generaciones jóvenes hacia el futuro?",
+"¿Es más importante la libertad o la seguridad?",
+"¿Crees que las personas son esencialmente buenas o malas?",
+"¿Cómo definirías la felicidad en pocas palabras?",
+"¿Qué rol juega el miedo en nuestras decisiones?",
+"¿Crees que la educación debe ser gratuita para todos?",
+"¿Cuál es el mayor impacto del arte en la sociedad?",
+"¿Es posible vivir sin prejuicios?",
+"¿Qué significa 'ser auténtico'?",
+"¿Qué opinas del concepto de meritocracia?",
+"¿Es mejor ser prudente o arriesgado?",
+"¿Qué rol debería jugar el gobierno en la vida de las personas?",
+"¿Es la humanidad inherentemente egoísta o colaborativa?",
+"¿Qué tan importante es preservar las tradiciones?",
+"¿Cómo defines el verdadero liderazgo?",
+"¿Crees que las redes sociales son un beneficio o un problema para la sociedad?",
+"¿Qué opinas sobre la privacidad en la era digital?",
+"¿Es posible alcanzar la igualdad total entre las personas?",
+"¿Qué representa la libertad de expresión para ti?",
+"¿Qué hace que una persona sea sabia?",
+"¿Es más importante ser amado o respetado?",
+"¿Crees que el sufrimiento tiene un propósito?",
+"¿Qué opinas de la búsqueda de la inmortalidad?",
+"¿El tiempo lo cura todo o solo lo cambia?",
+"¿Qué tan importante es la sostenibilidad para el futuro del planeta?",
+"¿Qué opinas sobre el sacrificio por los demás?"
+            ],
+            profundidad: [
+                "¿Qué es lo que más valoras de ti mismo?",
+"¿Cómo describirías tu infancia en una palabra?",
+"¿Qué lección aprendiste de tu último fracaso?",
+"¿Qué significa para ti la palabra 'hogar'?",
+"¿Cuál ha sido el momento más feliz de tu vida?",
+"¿Qué es algo que nunca le has contado a nadie?",
+"¿Qué harías diferente si pudieras retroceder 10 años?",
+"¿Cómo te gustaría ser recordado?",
+"¿Qué te hace sentir más amado?",
+"¿Cómo defines la vulnerabilidad?",
+"¿Cuál ha sido el día más difícil de tu vida?",
+"¿Qué crees que es lo más importante en una relación?",
+"¿Qué sueños dejaste atrás y por qué?",
+"¿Qué haces cuando te sientes solo?",
+"¿Qué significa para ti el perdón?",
+"¿Qué hábito te gustaría cambiar en tu vida?",
+"¿Qué es lo que más te inspira?",
+"¿Cómo manejas el miedo al fracaso?",
+"¿Qué te da paz interior?",
+"¿Qué es algo que quisieras sanar en tu vida?",
+"¿Qué relación tienes con el pasado?",
+"¿Qué piensas sobre el tiempo y su impacto en la vida?",
+"¿Qué has aprendido de las pérdidas?",
+"¿Cuál es tu mayor temor para el futuro?",
+"¿Qué aspecto de tu personalidad admiras más?",
+"¿Cuál es tu mayor sueño y por qué?",
+"¿Qué es lo más valioso que has aprendido de tus padres?",
+"¿Qué experiencia te hizo madurar más rápido?",
+"¿Cómo manejas la incertidumbre en tu vida?",
+"¿Qué significa para ti ser feliz?",
+"¿Qué haces cuando te sientes abrumado?",
+"¿Qué consejo te darías a ti mismo hace cinco años?",
+"¿Qué te hace sentir más seguro de ti mismo?",
+"¿Qué es lo que más te cuesta perdonar?",
+"¿Qué recuerdo te llena de alegría?",
+"¿Qué relaciones han definido quién eres hoy?",
+"¿Qué te da esperanza en momentos difíciles?",
+"¿Cómo describirías tu infancia en una frase?",
+"¿Qué opinas sobre el concepto de destino?",
+"¿Qué miedos crees que has superado?",
+"¿Qué significa para ti ser vulnerable?",
+"¿Qué crees que hace especial a una persona?",
+"¿Qué harías si supieras que no tienes mucho tiempo de vida?",
+"¿Qué emociones te resulta difícil expresar?",
+"¿Qué relación tienes con tus errores?",
+"¿Qué te hace sentir conectado con los demás?",
+"¿Qué evento cambió tu forma de ver el mundo?",
+"¿Qué es lo que más agradeces en la vida?",
+"¿Qué parte de tu personalidad estás trabajando en mejorar?",
+"¿Qué sueño cumplido te hizo sentir más realizado?"
+            ]
+        };
+
+        const categorias = Object.keys(preguntas);
+        const wheel = document.getElementById("wheel");
+        const resultDiv = document.getElementById("result");
+
+        let currentRotation = 0;
+
+        function spinWheel() {
+            const rotationIncrement = 360 * 30;
+            const randomOffset = Math.floor(Math.random() * 360);
+            const totalRotation = currentRotation + rotationIncrement + randomOffset;
+
+            wheel.style.transition = "transform 3s ease-out";
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+
+            const selectedRotation = (totalRotation % 360 + 360) % 360;
+            let selectedSection;
+
+            if (selectedRotation >= 0 && selectedRotation < 90) {
+                selectedSection = "presentacion";
+            } else if (selectedRotation >= 90 && selectedRotation < 180) {
+                selectedSection = "perspectiva";
+            } else if (selectedRotation >= 180 && selectedRotation < 270) {
+                selectedSection = "profundidad";
+            } else {
+                selectedSection = "descomprimir";
+            }
+
+            currentRotation = totalRotation;
+
+            setTimeout(() => {
+                const preguntasCategoria = preguntas[selectedSection];
+                if (preguntasCategoria.length > 0) {
+                    const preguntaAleatoriaIndex = Math.floor(Math.random() * preguntasCategoria.length);
+                    const preguntaSeleccionada = preguntasCategoria.splice(preguntaAleatoriaIndex, 1)[0];
+                    resultDiv.textContent = ` ${selectedSection.toUpperCase()} - ${preguntaSeleccionada}`;
+                } else {
+                    alert(`No quedan preguntas en la categoría ${selectedSection}.`);
+                }
+            }, 3000);
+        }
+
+        function reiniciarPreguntas() {
+            preguntas.descomprimir = [
+                "¿Si fueras un animal, cuál serías y por qué?",
+"¿Cómo se llamaría tu autobiografía?",
+"¿Qué invento te gustaría crear?",
+"¿Qué harías si fueras invisible por un día?",
+"¿Qué superhéroe te gustaría ser?",
+"¿Qué harías si pudieras viajar en el tiempo?",
+"¿Cómo sería un mundo ideal según tú?",
+"¿Qué harías con un millón de dólares?",
+"¿Cómo sería tu fiesta perfecta?",
+"¿Qué harías si pudieras volar?",
+"¿Qué nombre te pondrías si fueras famoso?",
+"¿Si tu vida fuera una película, cómo se llamaría?",
+"¿Qué harías si encontraras un tesoro enterrado?",
+"¿Qué harías si pudieras detener el tiempo?",
+"¿Qué personaje ficticio te representa?",
+"¿Si pudieras tener cualquier profesión, cuál sería?",
+"¿Qué emoji describe tu estado actual?",
+"¿Qué harías si pudieras vivir en otro planeta?",
+"¿Cómo sería tu parque de diversiones ideal?",
+"¿Si fueras un sabor de helado, cuál serías?",
+"¿Qué objeto cotidiano te representa mejor?",
+"¿Qué harías si pudieras cambiar de cuerpo con alguien por un día?",
+"¿Cómo sería tu casa soñada?",
+"¿Qué harías si descubrieras un superpoder?",
+"¿Qué música sonarías si fueras una canción?",
+"¿Si fueras un personaje de Disney, quién serías?",
+"¿Qué nombre creativo le pondrías a un restaurante?",
+"¿Cómo sería tu superpoder más extraño?",
+"¿Qué harías si pudieras hablar con los animales?",
+"¿Qué lugar inventarías para vivir por siempre?",
+"¿Qué harías si pudieras controlar el clima?",
+"¿Si fueras un objeto inanimado, cuál serías?",
+"¿Qué le dirías a tu yo del futuro?",
+"¿Cómo sería tu bebida personalizada?",
+"¿Si pudieras ser cualquier cosa, qué elegirías?",
+"¿Qué habilidad inútil te gustaría dominar?",
+"¿Cómo sería un día en un planeta habitado solo por gatos?",
+"¿Qué invento cambiaría tu vida por completo?",
+"¿Si pudieras cambiar tu voz, cómo sería?",
+"¿Qué harías si pudieras ser otra especie por un día?",
+"¿Cómo sería tu mundo ideal para vacacionar?",
+"¿Qué le dirías a un extraterrestre si te visitara?",
+"¿Cómo sería tu caricatura o cómic?",
+"¿Qué es lo más loco que harías con un millón de dólares?",
+"¿Cómo sería tu versión animada en una película?",
+"¿Qué historia loca inventarías sobre tu vida?",
+"¿Qué harías si los objetos hablaran?",
+"¿Cómo sería un día como gigante?",
+"¿Qué harías si el tiempo funcionara al revés?",
+"¿Cómo decorarías una casa en otro planeta?"
+            ];
+            preguntas.presentacion = [
+                "¿Qué película puedes ver mil veces sin aburrirte?",
+"¿Prefieres playa, montaña o ciudad?",
+"¿Qué comida te trae nostalgia?",
+"¿Cuál es tu género musical favorito?",
+"¿Qué plato sería tu última cena?",
+"¿Qué lugar sueñas con visitar?",
+"¿Qué libro o autor marcó tu vida?",
+"¿Qué personaje histórico te inspira más?",
+"¿Qué color representa tu personalidad?",
+"¿Cuál es tu actividad favorita un domingo?",
+"¿Prefieres café o té?",
+"¿Qué serie estás viendo actualmente?",
+"¿Qué hobby te gustaría retomar o aprender?",
+"¿Qué festividad disfrutas más?",
+"¿Qué tipo de clima prefieres?",
+"¿Qué emoji usas más seguido?",
+"¿Qué canción describe tu vida ahora?",
+"¿Eres de dulces o salados?",
+"¿Qué superpoder desearías tener?",
+"¿Qué tipo de libros prefieres leer?",
+"¿Cómo sería tu día ideal?",
+"¿Qué prefieres: el amanecer o el atardecer?",
+"¿Tienes algún talento oculto?",
+"¿Qué lugar te hace sentir en paz?",
+"¿Cuál es tu tipo de vacaciones ideal?",
+"¿Cuál es tu libro favorito y por qué?",
+"¿Qué sabor de helado nunca pedirías?",
+"¿Qué deporte disfrutas ver o practicar?",
+"¿Tienes un color de la suerte?",
+"¿Qué canción hace que te levantes a bailar?",
+"¿Cuál es tu festividad menos favorita?",
+"¿Qué accesorio nunca falta en tu outfit?",
+"¿Tienes una película que siempre te hace llorar?",
+"¿Qué comida podrías comer todos los días?",
+"¿Qué videojuego te marcó en tu infancia?",
+"¿Prefieres las películas subtituladas o dobladas?",
+"¿Qué prefieres: cine o teatro?",
+"¿Qué lugar consideras 'tu refugio'?",
+"¿Cuál es tu género de libros favorito?",
+"¿Qué instrumento musical te gustaría aprender?"
+            ];
+            preguntas.perspectiva = [
+                "¿Crees que las personas pueden cambiar radicalmente?",
+"¿Qué opinas sobre la importancia del perdón?",
+"¿Es mejor seguir la lógica o el corazón?",
+"¿Cuál es el mayor desafío de la humanidad hoy?",
+"¿Todo ocurre por una razón o es al azar?",
+"¿Qué significa el éxito para ti?",
+"¿Es la felicidad una meta o un camino?",
+"¿Qué tanto influye la suerte en la vida?",
+"¿El talento es innato o se desarrolla?",
+"¿Qué valoras más: el respeto o la empatía?",
+"¿Cuál es tu idea de una sociedad justa?",
+"¿Qué define a un héroe en tu opinión?",
+"¿Cómo lidias con las críticas?",
+"¿Qué es más importante: estabilidad o aventura?",
+"¿Es posible el amor incondicional?",
+"¿Qué prefieres: destino o libre albedrío?",
+"¿Cómo definirías la justicia en tus propias palabras?",
+"¿Crees que la educación transforma vidas?",
+"¿Cómo influye la tecnología en la forma de ver el mundo?",
+"¿Qué es lo que hace significativa a una vida?",
+"¿Qué opinas sobre los movimientos sociales modernos?",
+"¿Crees que existe una verdad absoluta?",
+"¿Qué preferirías: paz mundial o desarrollo personal?",
+"¿Es importante la religión para la moralidad?",
+"¿Qué responsabilidad tienen las generaciones jóvenes hacia el futuro?",
+"¿Es más importante la libertad o la seguridad?",
+"¿Crees que las personas son esencialmente buenas o malas?",
+"¿Cómo definirías la felicidad en pocas palabras?",
+"¿Qué rol juega el miedo en nuestras decisiones?",
+"¿Crees que la educación debe ser gratuita para todos?",
+"¿Cuál es el mayor impacto del arte en la sociedad?",
+"¿Es posible vivir sin prejuicios?",
+"¿Qué significa 'ser auténtico'?",
+"¿Qué opinas del concepto de meritocracia?",
+"¿Es mejor ser prudente o arriesgado?",
+"¿Qué rol debería jugar el gobierno en la vida de las personas?",
+"¿Es la humanidad inherentemente egoísta o colaborativa?",
+"¿Qué tan importante es preservar las tradiciones?",
+"¿Cómo defines el verdadero liderazgo?",
+"¿Crees que las redes sociales son un beneficio o un problema para la sociedad?",
+"¿Qué opinas sobre la privacidad en la era digital?",
+"¿Es posible alcanzar la igualdad total entre las personas?",
+"¿Qué representa la libertad de expresión para ti?",
+"¿Qué hace que una persona sea sabia?",
+"¿Es más importante ser amado o respetado?",
+"¿Crees que el sufrimiento tiene un propósito?",
+"¿Qué opinas de la búsqueda de la inmortalidad?",
+"¿El tiempo lo cura todo o solo lo cambia?",
+"¿Qué tan importante es la sostenibilidad para el futuro del planeta?",
+"¿Qué opinas sobre el sacrificio por los demás?"
+            ];
+            preguntas.profundidad = [
+                "¿Qué es lo que más valoras de ti mismo?",
+"¿Cómo describirías tu infancia en una palabra?",
+"¿Qué lección aprendiste de tu último fracaso?",
+"¿Qué significa para ti la palabra 'hogar'?",
+"¿Cuál ha sido el momento más feliz de tu vida?",
+"¿Qué es algo que nunca le has contado a nadie?",
+"¿Qué harías diferente si pudieras retroceder 10 años?",
+"¿Cómo te gustaría ser recordado?",
+"¿Qué te hace sentir más amado?",
+"¿Cómo defines la vulnerabilidad?",
+"¿Cuál ha sido el día más difícil de tu vida?",
+"¿Qué crees que es lo más importante en una relación?",
+"¿Qué sueños dejaste atrás y por qué?",
+"¿Qué haces cuando te sientes solo?",
+"¿Qué significa para ti el perdón?",
+"¿Qué hábito te gustaría cambiar en tu vida?",
+"¿Qué es lo que más te inspira?",
+"¿Cómo manejas el miedo al fracaso?",
+"¿Qué te da paz interior?",
+"¿Qué es algo que quisieras sanar en tu vida?",
+"¿Qué relación tienes con el pasado?",
+"¿Qué piensas sobre el tiempo y su impacto en la vida?",
+"¿Qué has aprendido de las pérdidas?",
+"¿Cuál es tu mayor temor para el futuro?",
+"¿Qué aspecto de tu personalidad admiras más?",
+"¿Cuál es tu mayor sueño y por qué?",
+"¿Qué es lo más valioso que has aprendido de tus padres?",
+"¿Qué experiencia te hizo madurar más rápido?",
+"¿Cómo manejas la incertidumbre en tu vida?",
+"¿Qué significa para ti ser feliz?",
+"¿Qué haces cuando te sientes abrumado?",
+"¿Qué consejo te darías a ti mismo hace cinco años?",
+"¿Qué te hace sentir más seguro de ti mismo?",
+"¿Qué es lo que más te cuesta perdonar?",
+"¿Qué recuerdo te llena de alegría?",
+"¿Qué relaciones han definido quién eres hoy?",
+"¿Qué te da esperanza en momentos difíciles?",
+"¿Cómo describirías tu infancia en una frase?",
+"¿Qué opinas sobre el concepto de destino?",
+"¿Qué miedos crees que has superado?",
+"¿Qué significa para ti ser vulnerable?",
+"¿Qué crees que hace especial a una persona?",
+"¿Qué harías si supieras que no tienes mucho tiempo de vida?",
+"¿Qué emociones te resulta difícil expresar?",
+"¿Qué relación tienes con tus errores?",
+"¿Qué te hace sentir conectado con los demás?",
+"¿Qué evento cambió tu forma de ver el mundo?",
+"¿Qué es lo que más agradeces en la vida?",
+"¿Qué parte de tu personalidad estás trabajando en mejorar?",
+"¿Qué sueño cumplido te hizo sentir más realizado?"
+            ];
+            resultDiv.textContent = "";
+
+            // Reiniciar la rotación de la ruleta
+            currentRotation = 0;
+            wheel.style.transition = "none";
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+        }
+
+        wheel.addEventListener('click', spinWheel);
+    </script>
+</body>
+</html>
